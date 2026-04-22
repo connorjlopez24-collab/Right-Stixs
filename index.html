@@ -126,18 +126,25 @@ function startQuiz(){
   showQuestion();
 }
 
+<script>
 function showQuestion(){
   let q = questions[step];
   document.getElementById("question").innerText = q.q;
 
-  let html = "";
+  let container = document.getElementById("options");
+  container.innerHTML = "";
+
   q.a.forEach(opt => {
-    html += `<button onclick="select('${opt}')">${opt}</button>`;
+    let btn = document.createElement("button");
+    btn.innerText = opt;
+    btn.onclick = function() {
+      select(opt);
+    };
+    container.appendChild(btn);
   });
-
-  document.getElementById("options").innerHTML = html;
 }
-
+</script>
+  
 function select(answer){
   answers.push(answer);
   step++;
