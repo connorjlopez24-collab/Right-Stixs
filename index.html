@@ -2,38 +2,119 @@
 <html>
 <head>
   <title>Right Stixs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    body { font-family: Arial; text-align: center; padding: 40px; }
-    button { padding: 12px 20px; margin: 10px; cursor: pointer; }
-    .hidden { display: none; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0a0a;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border: none;
+      background: white;
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #ddd;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .card {
+      background: #111;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .tag {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .result-title {
+      font-size: 22px;
+      margin: 10px 0;
+    }
+
+    .fade {
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 
 <body>
 
-<h1>RIGHT STIXS</h1>
-<p>A precision fitting system for your golf game.</p>
+<div class="container">
 
-<div id="home">
-  <button onclick="startQuiz()">Start Fitting</button>
-</div>
+  <!-- HOME -->
+  <div id="home" class="fade">
+    <h1>RIGHT STIXS</h1>
+    <p>Precision fitting for golfers who want clarity.</p>
+    <button onclick="startQuiz()">Start Fitting</button>
+  </div>
 
-<div id="quiz" class="hidden">
-  <p id="question"></p>
-  <div id="options"></div>
-</div>
+  <!-- QUIZ -->
+  <div id="quiz" class="hidden card fade">
+    <div class="tag">PLAYER FIT ASSESSMENT</div>
+    <h2 id="question"></h2>
+    <div id="options"></div>
+  </div>
 
-<div id="result" class="hidden">
-  <h2 id="resultTitle"></h2>
-  <p id="resultDesc"></p>
-  <button onclick="restart()">Start Over</button>
+  <!-- RESULT -->
+  <div id="result" class="hidden card fade">
+    <div class="tag" id="resultTag"></div>
+    <div class="result-title" id="resultTitle"></div>
+    <p id="resultDesc"></p>
+    <button onclick="restart()">Start Over</button>
+  </div>
+
 </div>
 
 <script>
 const questions = [
-  { q: "Your experience?", a: ["Beginner","Casual","Regular","Serious"] },
-  { q: "Your goal?", a: ["Distance","Accuracy","Consistency","All-around"] },
-  { q: "Swing type?", a: ["Slow","Average","Fast"] }
+  { q: "What is your experience level?", a: ["Beginner","Casual","Regular","Serious"] },
+  { q: "What matters most in your game?", a: ["Distance","Accuracy","Consistency","All-around"] },
+  { q: "How would you describe your swing?", a: ["Smooth","Average","Powerful"] },
+  { q: "What is your height?", a: ["Under 5'5","5'5 - 5'10","5'10 - 6'2","6'2+"] }
 ];
 
 let step = 0;
@@ -48,16 +129,19 @@ function startQuiz(){
 function showQuestion(){
   let q = questions[step];
   document.getElementById("question").innerText = q.q;
-  let optionsHTML = "";
+
+  let html = "";
   q.a.forEach(opt => {
-    optionsHTML += `<button onclick="select('${opt}')">${opt}</button>`;
+    html += `<button onclick="select('${opt}')">${opt}</button>`;
   });
-  document.getElementById("options").innerHTML = optionsHTML;
+
+  document.getElementById("options").innerHTML = html;
 }
 
 function select(answer){
   answers.push(answer);
   step++;
+
   if(step < questions.length){
     showQuestion();
   } else {
@@ -69,13 +153,25 @@ function showResult(){
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
-  let result = "Balanced Performance Setup";
-  if(answers.includes("Beginner")) result = "Forgiveness Setup";
-  if(answers.includes("Serious")) result = "Precision Performance Setup";
+  let tag = "BALANCED PERFORMANCE PROFILE";
+  let title = "Edge Fit Recommendation";
+  let desc = "A refined balance of distance, control, and consistency.";
 
-  document.getElementById("resultTitle").innerText = result;
-  document.getElementById("resultDesc").innerText =
-    "This setup matches your playing style and goals.";
+  if(answers.includes("Beginner")){
+    tag = "FORGIVENESS PROFILE";
+    title = "Core Fit Recommendation";
+    desc = "Designed for maximum forgiveness and ease of play.";
+  }
+
+  if(answers.includes("Serious")){
+    tag = "PRECISION PERFORMANCE PROFILE";
+    title = "Elite Fit Recommendation";
+    desc = "Built for control, feedback, and advanced shot shaping.";
+  }
+
+  document.getElementById("resultTag").innerText = tag;
+  document.getElementById("resultTitle").innerText = title;
+  document.getElementById("resultDesc").innerText = desc;
 }
 
 function restart(){
