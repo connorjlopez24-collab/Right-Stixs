@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Right Stixs</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 40px; }
+    button { padding: 12px 20px; margin: 10px; cursor: pointer; }
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+
+<h1>RIGHT STIXS</h1>
+<p>A precision fitting system for your golf game.</p>
+
+<div id="home">
+  <button onclick="startQuiz()">Start Fitting</button>
+</div>
+
+<div id="quiz" class="hidden">
+  <p id="question"></p>
+  <div id="options"></div>
+</div>
+
+<div id="result" class="hidden">
+  <h2 id="resultTitle"></h2>
+  <p id="resultDesc"></p>
+  <button onclick="restart()">Start Over</button>
+</div>
+
+<script>
+const questions = [
+  { q: "Your experience?", a: ["Beginner","Casual","Regular","Serious"] },
+  { q: "Your goal?", a: ["Distance","Accuracy","Consistency","All-around"] },
+  { q: "Swing type?", a: ["Slow","Average","Fast"] }
+];
+
+let step = 0;
+let answers = [];
+
+function startQuiz(){
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion(){
+  let q = questions[step];
+  document.getElementById("question").innerText = q.q;
+  let optionsHTML = "";
+  q.a.forEach(opt => {
+    optionsHTML += `<button onclick="select('${opt}')">${opt}</button>`;
+  });
+  document.getElementById("options").innerHTML = optionsHTML;
+}
+
+function select(answer){
+  answers.push(answer);
+  step++;
+  if(step < questions.length){
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult(){
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+
+  let result = "Balanced Performance Setup";
+  if(answers.includes("Beginner")) result = "Forgiveness Setup";
+  if(answers.includes("Serious")) result = "Precision Performance Setup";
+
+  document.getElementById("resultTitle").innerText = result;
+  document.getElementById("resultDesc").innerText =
+    "This setup matches your playing style and goals.";
+}
+
+function restart(){
+  step = 0;
+  answers = [];
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
