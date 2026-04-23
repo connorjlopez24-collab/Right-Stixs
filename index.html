@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Right Stixs Fitting</title>
+  <title>Right Stixs Fit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -27,7 +27,7 @@
     .sub {
       color: #888;
       font-size: 13px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .card {
@@ -36,11 +36,20 @@
       border-radius: 12px;
       padding: 18px;
       margin-top: 15px;
+      text-align: left;
+    }
+
+    .tag {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #777;
+      margin-bottom: 10px;
     }
 
     .question {
       font-size: 18px;
       margin-bottom: 15px;
+      text-align: center;
     }
 
     button {
@@ -57,22 +66,35 @@
 
     .hidden { display: none; }
 
-    .tag {
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: #777;
-      margin-bottom: 10px;
+    .section {
+      margin-top: 10px;
+      padding: 10px;
+      background: #0f0f0f;
+      border: 1px solid #1f1f1f;
+      border-radius: 10px;
     }
 
-    .resultTitle {
-      font-size: 20px;
-      margin-bottom: 10px;
+    .title {
+      font-size: 18px;
+      margin-bottom: 8px;
     }
 
-    .resultText {
+    .desc {
+      font-size: 13px;
       color: #aaa;
-      font-size: 14px;
       line-height: 1.5;
+    }
+
+    .buy {
+      margin-top: 8px;
+      background: #fff;
+      color: #000;
+      border-radius: 8px;
+      padding: 10px;
+      font-weight: bold;
+      text-decoration: none;
+      display: block;
+      text-align: center;
     }
 
   </style>
@@ -83,15 +105,13 @@
 <div class="container">
 
   <h1>RIGHT STIXS FIT</h1>
-  <div class="sub">Answer a few simple questions to find your best golf clubs.</div>
+  <div class="sub">Full bag fitting in under 30 seconds</div>
 
   <!-- QUIZ -->
   <div id="quiz" class="card">
 
-    <div class="tag">STEP <span id="stepNum">1</span> / 3</div>
-
+    <div class="tag">QUESTION</div>
     <div class="question" id="question"></div>
-
     <div id="options"></div>
 
   </div>
@@ -99,9 +119,35 @@
   <!-- RESULT -->
   <div id="result" class="card hidden">
 
-    <div class="tag">YOUR FIT</div>
-    <div class="resultTitle" id="title"></div>
-    <div class="resultText" id="desc"></div>
+    <div class="tag">YOUR CUSTOM GOLF BAG</div>
+
+    <!-- DRIVER -->
+    <div class="section">
+      <div class="title">Driver</div>
+      <div class="desc" id="driverText"></div>
+      <a href="#" class="buy">View Recommended Drivers</a>
+    </div>
+
+    <!-- IRONS -->
+    <div class="section">
+      <div class="title">Irons</div>
+      <div class="desc" id="ironText"></div>
+      <a href="#" class="buy">View Recommended Irons</a>
+    </div>
+
+    <!-- WEDGES -->
+    <div class="section">
+      <div class="title">Wedges</div>
+      <div class="desc" id="wedgeText"></div>
+      <a href="#" class="buy">View Recommended Wedges</a>
+    </div>
+
+    <!-- PUTTER -->
+    <div class="section">
+      <div class="title">Putter</div>
+      <div class="desc" id="putterText"></div>
+      <a href="#" class="buy">View Recommended Putters</a>
+    </div>
 
   </div>
 
@@ -115,7 +161,7 @@ const questions = [
     a: ["Beginner", "Casual", "Advanced"]
   },
   {
-    q: "What matters most in your game?",
+    q: "What matters most?",
     a: ["Distance", "Accuracy", "Consistency"]
   },
   {
@@ -128,8 +174,6 @@ let step = 0;
 let answers = [];
 
 function loadQuestion() {
-
-  document.getElementById("stepNum").innerText = step + 1;
 
   let q = questions[step];
 
@@ -163,26 +207,35 @@ function showResult() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
-  let title = "Balanced Golf Fit";
-  let desc = "A good mix of forgiveness, distance, and control.";
+  // DRIVER
+  let driver = "Balanced 10.5° driver for easy launch";
+  let irons = "Forgiving irons for consistency";
+  let wedges = "Standard wedges for control around greens";
+  let putter = "Standard mallet putter for stability";
 
   if (answers.includes("Beginner")) {
-    title = "Forgiving Beginner Fit";
-    desc = "Easy-to-hit clubs designed to help you get consistent contact and build confidence.";
+    driver = "High-loft driver (11°–12°) for easier launch";
+    irons = "Super forgiving irons for straighter shots";
+    wedges = "Easy bounce wedges for better contact";
+    putter = "High-MOI mallet putter for stability and forgiveness";
   }
 
   if (answers.includes("Fast")) {
-    title = "Performance Player Fit";
-    desc = "Lower spin, more control, and equipment built for higher swing speeds.";
+    driver = "Low-spin driver (9°) for control and distance";
+    irons = "Players irons for precision";
+    wedges = "Tour wedges for shot shaping";
+    putter = "Blade putter for better feel and control";
   }
 
   if (answers.includes("Accuracy")) {
-    title = "Control-Focused Fit";
-    desc = "Clubs designed to tighten your shot pattern and improve accuracy.";
+    irons = "Accuracy-focused irons for tighter shot dispersion";
+    putter = "Face-balanced mallet putter for straight strokes";
   }
 
-  document.getElementById("title").innerText = title;
-  document.getElementById("desc").innerText = desc;
+  document.getElementById("driverText").innerText = driver;
+  document.getElementById("ironText").innerText = irons;
+  document.getElementById("wedgeText").innerText = wedges;
+  document.getElementById("putterText").innerText = putter;
 }
 
 loadQuestion();
@@ -190,4 +243,4 @@ loadQuestion();
 </script>
 
 </body>
-</html>  
+</html>
