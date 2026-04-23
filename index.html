@@ -1,78 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Right Stixs</title>
+  <title>TrackFit Final Form</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0a0a0a;
+      font-family: Arial;
+      background: #050505;
       color: white;
       text-align: center;
     }
 
     .container {
-      max-width: 520px;
+      max-width: 620px;
       margin: auto;
-      padding: 40px 20px;
+      padding: 20px 15px;
     }
 
     h1 {
-      letter-spacing: 2px;
-      margin-bottom: 10px;
+      letter-spacing: 3px;
+      font-size: 22px;
     }
 
-    p {
-      color: #aaa;
-      margin-bottom: 20px;
-    }
+    p { color: #888; font-size: 13px; }
 
     button {
       width: 100%;
       padding: 14px;
-      margin: 8px 0;
+      margin-top: 10px;
       border: none;
       background: white;
       color: black;
       font-weight: bold;
       border-radius: 8px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #ddd;
     }
 
     .card {
-      background: #111;
-      padding: 20px;
+      background: #0f0f0f;
+      border: 1px solid #1f1f1f;
       border-radius: 12px;
-      margin-top: 20px;
+      padding: 15px;
+      margin-top: 15px;
+      text-align: left;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
-    .tag {
-      font-size: 12px;
-      letter-spacing: 2px;
+    .label {
+      font-size: 10px;
       color: #777;
-      margin-bottom: 10px;
+      letter-spacing: 2px;
     }
 
-    .result-title {
-      font-size: 20px;
-      margin-bottom: 10px;
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
     }
 
-    .desc {
-      color: #ccc;
-      font-size: 14px;
+    .tile {
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #1a1a1a;
+    }
+
+    .value {
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* SHOT TRACER */
+    .range {
+      position: relative;
+      height: 150px;
+      background: #0a0a0a;
+      border-radius: 10px;
+      border: 1px solid #222;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .ball {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      animation: fly 1.6s ease-out forwards;
+    }
+
+    @keyframes fly {
+      0% { transform: translate(0,0); }
+      50% { transform: translate(140px,-90px); }
+      100% { transform: translate(280px,0); }
+    }
+
+    .target {
+      position: absolute;
+      right: 20px;
+      bottom: 10px;
+      width: 10px;
+      height: 10px;
+      border: 2px solid #4ade80;
+      border-radius: 50%;
+    }
+
+    .report {
+      font-size: 13px;
+      color: #bbb;
       line-height: 1.6;
     }
+
   </style>
 </head>
 
@@ -82,170 +126,135 @@
 
   <!-- HOME -->
   <div id="home">
-    <h1>RIGHT STIXS</h1>
-    <p>Smart golf fitting system built for clarity.</p>
-    <button onclick="startQuiz()">Start Fitting</button>
-  </div>
 
-  <!-- QUIZ -->
-  <div id="quiz" class="hidden card">
-    <div class="tag">PLAYER FIT ASSESSMENT</div>
-    <h2 id="question"></h2>
-    <div id="options"></div>
+    <h1>TRACKFIT FINAL</h1>
+    <p>Launch monitor simulation engine</p>
+
+    <div class="card">
+      <div class="label">SWING SPEED</div>
+      <input id="speed" type="range" min="70" max="120" value="95">
+      <p>Speed: <span id="val">95</span> mph</p>
+    </div>
+
+    <button onclick="run()">Run Full Simulation</button>
   </div>
 
   <!-- RESULT -->
-  <div id="result" class="hidden card">
-    <div class="tag" id="resultTag"></div>
-    <div class="result-title" id="resultTitle"></div>
-    <div class="desc" id="resultDesc"></div>
-    <button onclick="restart()">Start Over</button>
+  <div id="result" class="hidden">
+
+    <div class="card">
+      <div class="label">LAUNCH DATA</div>
+
+      <div class="grid">
+        <div class="tile">
+          <div class="label">CARRY</div>
+          <div class="value" id="carry"></div>
+        </div>
+
+        <div class="tile">
+          <div class="label">BALL SPEED</div>
+          <div class="value" id="ball"></div>
+        </div>
+
+        <div class="tile">
+          <div class="label">SPIN</div>
+          <div class="value" id="spin"></div>
+        </div>
+
+        <div class="tile">
+          <div class="label">LAUNCH</div>
+          <div class="value" id="launch"></div>
+        </div>
+      </div>
+
+      <div class="range">
+        <div class="ball"></div>
+        <div class="target"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label">CLUB FIT REPORT</div>
+      <div class="report" id="clubs"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">FITTER NOTES</div>
+      <div class="report" id="notes"></div>
+    </div>
+
+    <button onclick="restart()">Run Again</button>
+
   </div>
 
 </div>
 
 <script>
-const questions = [
-  {
-    q: "What is your experience level?",
-    a: ["Beginner", "Casual", "Regular", "Serious"]
-  },
-  {
-    q: "What is your main goal?",
-    a: ["Distance", "Accuracy", "Consistency", "All-around"]
-  },
-  {
-    q: "How would you describe your swing?",
-    a: ["Smooth", "Average", "Powerful"]
-  }
-];
 
-let step = 0;
-let answers = [];
+const s = document.getElementById("speed");
+const v = document.getElementById("val");
 
-function startQuiz() {
+s.oninput = () => v.innerText = s.value;
+
+function run() {
+
   document.getElementById("home").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-  showQuestion();
-}
-
-function showQuestion() {
-  let q = questions[step];
-  document.getElementById("question").innerText = q.q;
-
-  let optionsDiv = document.getElementById("options");
-  optionsDiv.innerHTML = "";
-
-  q.a.forEach(function(opt) {
-    let btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.onclick = function() {
-      selectAnswer(opt);
-    };
-    optionsDiv.appendChild(btn);
-  });
-}
-
-function selectAnswer(answer) {
-  answers.push(answer);
-  step++;
-
-  if (step < questions.length) {
-    showQuestion();
-  } else {
-    showResult();
-  }
-}
-
-/* ---------------- SMART FIT ENGINE ---------------- */
-
-function showResult() {
-  document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
-  let skill = answers[0];
-  let goal = answers[1];
-  let swing = answers[2];
+  let speed = parseInt(s.value);
 
-  let forgiveness = 0;
-  let control = 0;
-  let distance = 0;
+  /* CORE PHYSICS MODEL */
+  let ballSpeed = Math.round(speed * 1.45);
+  let carry = Math.round((speed * speed) / 42);
+  let spin = Math.max(1800, 3400 - speed * 13);
+  let launch = Math.round(11 + (100 - speed) / 10);
 
-  // Skill weighting
-  if (skill === "Beginner") forgiveness += 3;
-  if (skill === "Casual") forgiveness += 2;
-  if (skill === "Regular") control += 1;
-  if (skill === "Serious") control += 3;
+  /* IMPACT QUALITY */
+  let strike = "Pure Strike";
+  if (speed < 85) strike = "Slight Contact Loss";
+  if (speed > 110) strike = "Elite Compression";
 
-  // Goal weighting
-  if (goal === "Distance") distance += 3;
-  if (goal === "Accuracy") control += 3;
-  if (goal === "Consistency") forgiveness += 2;
-  if (goal === "All-around") {
-    forgiveness += 1;
-    control += 1;
-    distance += 1;
+  /* CLUB FIT LOGIC */
+  let driver = "";
+  let irons = "";
+  let shaft = "";
+
+  if (speed < 85) {
+    driver = "High Loft Driver (11°–12°)";
+    irons = "Game Improvement Irons";
+    shaft = "Senior / Lightweight";
+  } else if (speed < 100) {
+    driver = "Mid Loft Driver (9.5°–10.5°)";
+    irons = "Players Distance Irons";
+    shaft = "Regular Flex";
+  } else {
+    driver = "Low Spin Driver (8°–9.5°)";
+    irons = "Players / Tour Irons";
+    shaft = "Stiff / X-Stiff";
   }
 
-  // Swing weighting
-  if (swing === "Smooth") forgiveness += 2;
-  if (swing === "Average") control += 1;
-  if (swing === "Powerful") distance += 2;
+  document.getElementById("ball").innerText = ballSpeed + " mph";
+  document.getElementById("carry").innerText = carry + " yds";
+  document.getElementById("spin").innerText = spin + " rpm";
+  document.getElementById("launch").innerText = launch + "°";
 
-  let tag = "";
-  let title = "";
-  let desc = "";
+  document.getElementById("clubs").innerHTML =
+    `<b>Driver:</b> ${driver}<br><br>
+     <b>Irons:</b> ${irons}<br><br>
+     <b>Shaft:</b> ${shaft}`;
 
-  if (forgiveness >= control && forgiveness >= distance) {
-    tag = "FORGIVENESS PROFILE";
-    title = "Game Improvement Setup";
-    desc = `
-      Built for consistency and easy launch.<br><br>
-      <b>Recommended Specs:</b><br>
-      • Driver: 10.5°–12°<br>
-      • Irons: Cavity back<br>
-      • Shaft: Regular / Senior flex<br><br>
-      Helps reduce mishits and improve contact.
-    `;
-  }
+  document.getElementById("notes").innerHTML =
+    `Strike Quality: ${strike}<br>
+     Efficiency model based on swing speed + compression estimate<br>
+     Fitting confidence: High`;
 
-  else if (control >= forgiveness && control >= distance) {
-    tag = "BALANCED PROFILE";
-    title = "Player Improvement Setup";
-    desc = `
-      Balanced mix of control and forgiveness.<br><br>
-      <b>Recommended Specs:</b><br>
-      • Driver: 9.5°–10.5°<br>
-      • Irons: Game improvement irons<br>
-      • Shaft: Regular / Stiff flex<br><br>
-      Helps improve consistency and shot control.
-    `;
-  }
-
-  else {
-    tag = "DISTANCE PROFILE";
-    title = "Power Performance Setup";
-    desc = `
-      Built for speed and distance.<br><br>
-      <b>Recommended Specs:</b><br>
-      • Driver: 8°–10°<br>
-      • Irons: Players irons<br>
-      • Shaft: Stiff / Extra stiff<br><br>
-      Maximizes ball speed and distance output.
-    `;
-  }
-
-  document.getElementById("resultTag").innerText = tag;
-  document.getElementById("resultTitle").innerText = title;
-  document.getElementById("resultDesc").innerHTML = desc;
 }
 
 function restart() {
-  step = 0;
-  answers = [];
   document.getElementById("result").classList.add("hidden");
   document.getElementById("home").classList.remove("hidden");
 }
+
 </script>
 
 </body>
