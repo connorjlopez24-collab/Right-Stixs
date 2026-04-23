@@ -105,66 +105,65 @@ function startQuiz(){
   showQuestion();
 }
 
-function showQuestion(){
-  let q = questions[step];
-  document.getElementById("question").innerText = q.q;
-
-  let container = document.getElementById("options");
-  container.innerHTML = "";
-
-  q.a.forEach(function(opt){
-    let btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.onclick = function(){
-      select(opt);
-    };
-    container.appendChild(btn);
-  });
-}
-
-function select(answer){
-  answers.push(answer);
-  step++;
-
-  if(step < questions.length){
-    showQuestion();
-  } else {
-    showResult();
-  }
-}
-
 function showResult(){
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
-  let tag = "BALANCED PERFORMANCE PROFILE";
-  let title = "Edge Fit Recommendation";
-  let desc = "A refined balance of distance, control, and consistency.";
+  let skill = answers[0];
+  let goal = answers[1];
+  let swing = answers[2];
 
-  if(answers.includes("Beginner")){
+  let tag = "";
+  let title = "";
+  let desc = "";
+  let setup = "";
+
+  if(skill === "Beginner"){
     tag = "FORGIVENESS PROFILE";
-    title = "Core Fit Recommendation";
-    desc = "Designed for maximum forgiveness and ease of play.";
+    title = "Game Improvement Setup";
+    desc = "Designed to help you hit the ball easier and more consistently.";
+
+    setup = `
+      <b>Recommended Setup:</b><br><br>
+      • Driver: 10.5°–12° loft<br>
+      • Irons: Cavity back (larger sweet spot)<br>
+      • Shaft: Regular or Senior flex<br>
+      • Clubs: Lightweight, forgiving design<br><br>
+      <i>Why this works:</i> Maximizes forgiveness and helps reduce mishits.
+    `;
   }
 
-  if(answers.includes("Serious")){
+  else if(skill === "Casual" || skill === "Regular"){
+    tag = "BALANCED PERFORMANCE PROFILE";
+    title = "Player Improvement Setup";
+    desc = "A mix of control and forgiveness to improve your consistency.";
+
+    setup = `
+      <b>Recommended Setup:</b><br><br>
+      • Driver: 9.5°–10.5° loft<br>
+      • Irons: Game improvement / players distance<br>
+      • Shaft: Regular or Stiff flex<br>
+      • Clubs: Balanced forgiveness + control<br><br>
+      <i>Why this works:</i> Gives you better control while still helping on off-center hits.
+    `;
+  }
+
+  else {
     tag = "PRECISION PERFORMANCE PROFILE";
-    title = "Elite Fit Recommendation";
-    desc = "Built for control and advanced performance.";
+    title = "Advanced Player Setup";
+    desc = "Built for control, feedback, and shot shaping.";
+
+    setup = `
+      <b>Recommended Setup:</b><br><br>
+      • Driver: 8°–10° loft (lower spin)<br>
+      • Irons: Players irons (compact heads)<br>
+      • Shaft: Stiff or Extra stiff<br>
+      • Clubs: Precision-focused design<br><br>
+      <i>Why this works:</i> Gives maximum control and feedback for skilled players.
+    `;
   }
 
   document.getElementById("resultTag").innerText = tag;
   document.getElementById("resultTitle").innerText = title;
-  document.getElementById("resultDesc").innerText = desc;
+  document.getElementById("resultDesc").innerHTML = desc + "<br><br>" + setup;
 }
-
-function restart(){
-  step = 0;
-  answers = [];
-  document.getElementById("result").classList.add("hidden");
-  document.getElementById("home").classList.remove("hidden");
-}
-</script>
-
-</body>
-</html>
