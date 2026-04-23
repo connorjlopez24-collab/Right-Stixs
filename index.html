@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: Arial, sans-serif;
       background: #0a0a0a;
       color: white;
       text-align: center;
@@ -20,7 +20,6 @@
     }
 
     h1 {
-      font-size: 32px;
       letter-spacing: 2px;
     }
 
@@ -35,27 +34,26 @@
       border: none;
       background: white;
       color: black;
-      font-weight: 600;
-      cursor: pointer;
+      font-weight: bold;
       border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .card {
+      background: #111;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
     }
 
     .hidden {
       display: none;
     }
 
-    .card {
-      background: #111;
-      padding: 25px;
-      border-radius: 12px;
-      margin-top: 20px;
-    }
-
     .tag {
       font-size: 12px;
-      letter-spacing: 2px;
       color: #777;
-      margin-bottom: 10px;
+      letter-spacing: 2px;
     }
   </style>
 </head>
@@ -67,13 +65,13 @@
   <!-- HOME -->
   <div id="home">
     <h1>RIGHT STIXS</h1>
-    <p>Precision fitting for golfers who want clarity.</p>
+    <p>Find the golf setup that fits your game.</p>
     <button onclick="startQuiz()">Start Fitting</button>
   </div>
 
   <!-- QUIZ -->
   <div id="quiz" class="hidden card">
-    <div class="tag">PLAYER FIT ASSESSMENT</div>
+    <div class="tag">FIT ASSESSMENT</div>
     <h2 id="question"></h2>
     <div id="options"></div>
   </div>
@@ -82,7 +80,7 @@
   <div id="result" class="hidden card">
     <div class="tag" id="resultTag"></div>
     <h2 id="resultTitle"></h2>
-    <p id="resultDesc"></p>
+    <div id="resultDesc"></div>
     <button onclick="restart()">Start Over</button>
   </div>
 
@@ -90,80 +88,111 @@
 
 <script>
 const questions = [
-  { q: "What is your experience level?", a: ["Beginner","Casual","Regular","Serious"] },
-  { q: "What matters most in your game?", a: ["Distance","Accuracy","Consistency","All-around"] },
-  { q: "How would you describe your swing?", a: ["Smooth","Average","Powerful"] },
-  { q: "What is your height?", a: ["Under 5ft5","5ft5-5ft10","5ft10-6ft2","6ft2+"] }
+  {
+    q: "What is your experience level?",
+    a: ["Beginner", "Casual", "Regular", "Serious"]
+  },
+  {
+    q: "What matters most?",
+    a: ["Distance", "Accuracy", "Consistency", "All-around"]
+  },
+  {
+    q: "Your swing type?",
+    a: ["Smooth", "Average", "Powerful"]
+  }
 ];
 
 let step = 0;
 let answers = [];
 
-function startQuiz(){
+function startQuiz() {
   document.getElementById("home").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
   showQuestion();
 }
 
-function showResult(){
+function showQuestion() {
+  let q = questions[step];
+  document.getElementById("question").innerText = q.q;
+
+  let optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  q.a.forEach(function(option) {
+    let btn = document.createElement("button");
+    btn.innerText = option;
+    btn.onclick = function() {
+      selectAnswer(option);
+    };
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function selectAnswer(answer) {
+  answers.push(answer);
+  step++;
+
+  if (step < questions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
   let skill = answers[0];
-  let goal = answers[1];
-  let swing = answers[2];
 
   let tag = "";
   let title = "";
   let desc = "";
-  let setup = "";
 
-  if(skill === "Beginner"){
+  if (skill === "Beginner") {
     tag = "FORGIVENESS PROFILE";
     title = "Game Improvement Setup";
-    desc = "Designed to help you hit the ball easier and more consistently.";
-
-    setup = `
-      <b>Recommended Setup:</b><br><br>
-      • Driver: 10.5°–12° loft<br>
-      • Irons: Cavity back (larger sweet spot)<br>
-      • Shaft: Regular or Senior flex<br>
-      • Clubs: Lightweight, forgiving design<br><br>
-      <i>Why this works:</i> Maximizes forgiveness and helps reduce mishits.
+    desc = `
+      Easy-to-hit setup built for confidence.<br><br>
+      • Driver: 10.5°–12°<br>
+      • Irons: Cavity back<br>
+      • Shaft: Regular/Senior<br><br>
+      Helps reduce mishits and improve consistency.
     `;
-  }
-
-  else if(skill === "Casual" || skill === "Regular"){
-    tag = "BALANCED PERFORMANCE PROFILE";
+  } else if (skill === "Casual" || skill === "Regular") {
+    tag = "BALANCED PROFILE";
     title = "Player Improvement Setup";
-    desc = "A mix of control and forgiveness to improve your consistency.";
-
-    setup = `
-      <b>Recommended Setup:</b><br><br>
-      • Driver: 9.5°–10.5° loft<br>
-      • Irons: Game improvement / players distance<br>
-      • Shaft: Regular or Stiff flex<br>
-      • Clubs: Balanced forgiveness + control<br><br>
-      <i>Why this works:</i> Gives you better control while still helping on off-center hits.
+    desc = `
+      Balanced setup for growing players.<br><br>
+      • Driver: 9.5°–10.5°<br>
+      • Irons: Game improvement<br>
+      • Shaft: Regular/Stiff<br><br>
+      Mix of forgiveness and control.
     `;
-  }
-
-  else {
-    tag = "PRECISION PERFORMANCE PROFILE";
+  } else {
+    tag = "PRECISION PROFILE";
     title = "Advanced Player Setup";
-    desc = "Built for control, feedback, and shot shaping.";
-
-    setup = `
-      <b>Recommended Setup:</b><br><br>
-      • Driver: 8°–10° loft (lower spin)<br>
-      • Irons: Players irons (compact heads)<br>
-      • Shaft: Stiff or Extra stiff<br>
-      • Clubs: Precision-focused design<br><br>
-      <i>Why this works:</i> Gives maximum control and feedback for skilled players.
+    desc = `
+      Built for control and performance.<br><br>
+      • Driver: 8°–10°<br>
+      • Irons: Players irons<br>
+      • Shaft: Stiff/Extra stiff<br><br>
+      Maximum control and feedback.
     `;
   }
 
   document.getElementById("resultTag").innerText = tag;
   document.getElementById("resultTitle").innerText = title;
-  document.getElementById("resultDesc").innerHTML = desc + "<br><br>" + setup;
+  document.getElementById("resultDesc").innerHTML = desc;
 }
+
+function restart() {
+  step = 0;
+  answers = [];
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
