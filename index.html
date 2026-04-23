@@ -1,123 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Right Stixs</title>
+  <title>Right Stixs Fitting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, Arial;
+      font-family: Arial;
       background: #0b0b0b;
       color: white;
-    }
-
-    /* HERO */
-    .hero {
       text-align: center;
-      padding: 70px 20px 30px;
     }
 
-    .brand {
-      font-size: 12px;
-      letter-spacing: 3px;
-      color: #aaa;
+    .container {
+      max-width: 520px;
+      margin: auto;
+      padding: 25px 15px;
     }
 
     h1 {
-      font-size: 36px;
-      margin: 10px 0;
-      letter-spacing: 1px;
+      font-size: 24px;
+      letter-spacing: 2px;
     }
 
     .sub {
-      color: #999;
-      font-size: 14px;
-      max-width: 420px;
-      margin: auto;
-      line-height: 1.5;
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 20px;
     }
 
-    .cta {
-      margin-top: 20px;
+    .card {
+      background: #111;
+      border: 1px solid #1f1f1f;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 15px;
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
     }
 
     button {
-      width: 90%;
-      max-width: 320px;
-      padding: 14px;
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
       border: none;
-      border-radius: 999px;
+      border-radius: 10px;
       background: white;
       color: black;
       font-weight: 600;
       cursor: pointer;
     }
 
-    /* INPUT SECTION */
-    .container {
-      max-width: 520px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .card {
-      background: #111;
-      border: 1px solid #1f1f1f;
-      border-radius: 14px;
-      padding: 18px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .label {
-      font-size: 11px;
-      color: #777;
-      letter-spacing: 2px;
-    }
-
-    input[type=range] {
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .speedVal {
-      margin-top: 8px;
-      color: #ddd;
-    }
-
-    /* RESULT */
     .hidden { display: none; }
 
-    .fitTitle {
-      font-size: 22px;
-      margin-bottom: 8px;
+    .tag {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #777;
+      margin-bottom: 10px;
     }
 
-    .fitDesc {
+    .resultTitle {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .resultText {
       color: #aaa;
       font-size: 14px;
       line-height: 1.5;
-    }
-
-    .box {
-      background: #0f0f0f;
-      border: 1px solid #1f1f1f;
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 12px;
-      text-align: left;
-    }
-
-    .smallLabel {
-      font-size: 10px;
-      color: #777;
-      letter-spacing: 2px;
-    }
-
-    .value {
-      font-size: 16px;
-      margin-top: 5px;
     }
 
   </style>
@@ -125,61 +80,28 @@
 
 <body>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="brand">RIGHT STIXS</div>
-  <h1>Find Your Perfect Clubs</h1>
-  <div class="sub">
-    A simple fitting system that matches your swing to the right golf setup.
-  </div>
-
-  <div class="cta">
-    <button onclick="start()">Get Fitted</button>
-  </div>
-</div>
-
-<!-- INPUT -->
 <div class="container">
 
-  <div id="input" class="card hidden">
+  <h1>RIGHT STIXS FIT</h1>
+  <div class="sub">Answer a few simple questions to find your best golf clubs.</div>
 
-    <div class="label">SWING SPEED</div>
+  <!-- QUIZ -->
+  <div id="quiz" class="card">
 
-    <input id="speed" type="range" min="70" max="120" value="95">
-    <div class="speedVal">Speed: <span id="val">95</span> mph</div>
+    <div class="tag">STEP <span id="stepNum">1</span> / 3</div>
 
-    <button onclick="run()" style="margin-top:15px;">See My Fit</button>
+    <div class="question" id="question"></div>
+
+    <div id="options"></div>
 
   </div>
 
   <!-- RESULT -->
-  <div id="result" class="hidden">
+  <div id="result" class="card hidden">
 
-    <div class="card">
-
-      <div class="fitTitle" id="profile"></div>
-      <div class="fitDesc">
-        This is your recommended golf setup based on swing speed.
-      </div>
-
-      <div class="box">
-        <div class="smallLabel">ESTIMATED DISTANCE</div>
-        <div class="value" id="distance"></div>
-      </div>
-
-      <div class="box">
-        <div class="smallLabel">SHAFT TYPE</div>
-        <div class="value" id="shaft"></div>
-      </div>
-
-      <div class="box">
-        <div class="smallLabel">BEST CLUB TYPE</div>
-        <div class="value" id="clubs"></div>
-      </div>
-
-    </div>
-
-    <button onclick="restart()">Try Again</button>
+    <div class="tag">YOUR FIT</div>
+    <div class="resultTitle" id="title"></div>
+    <div class="resultText" id="desc"></div>
 
   </div>
 
@@ -187,57 +109,85 @@
 
 <script>
 
-const s = document.getElementById("speed");
-const v = document.getElementById("val");
+const questions = [
+  {
+    q: "What is your experience level?",
+    a: ["Beginner", "Casual", "Advanced"]
+  },
+  {
+    q: "What matters most in your game?",
+    a: ["Distance", "Accuracy", "Consistency"]
+  },
+  {
+    q: "How fast is your swing?",
+    a: ["Slow", "Average", "Fast"]
+  }
+];
 
-function start() {
-  document.getElementById("input").classList.remove("hidden");
+let step = 0;
+let answers = [];
+
+function loadQuestion() {
+
+  document.getElementById("stepNum").innerText = step + 1;
+
+  let q = questions[step];
+
+  document.getElementById("question").innerText = q.q;
+
+  let box = document.getElementById("options");
+  box.innerHTML = "";
+
+  q.a.forEach(opt => {
+    let btn = document.createElement("button");
+    btn.innerText = opt;
+    btn.onclick = () => select(opt);
+    box.appendChild(btn);
+  });
 }
 
-s.oninput = () => v.innerText = s.value;
+function select(answer) {
 
-function run() {
+  answers.push(answer);
+  step++;
 
-  document.getElementById("input").classList.add("hidden");
+  if (step < questions.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+
+  document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
-  let speed = parseInt(s.value);
-  let distance = Math.round((speed * speed) / 45);
+  let title = "Balanced Golf Fit";
+  let desc = "A good mix of forgiveness, distance, and control.";
 
-  let profile = "";
-  let shaft = "";
-  let clubs = "";
-
-  if (speed < 85) {
-    profile = "Beginner Friendly Fit";
-    shaft = "Light / Senior Flex";
-    clubs = "Forgiving driver + easy irons for confidence";
+  if (answers.includes("Beginner")) {
+    title = "Forgiving Beginner Fit";
+    desc = "Easy-to-hit clubs designed to help you get consistent contact and build confidence.";
   }
 
-  else if (speed < 100) {
-    profile = "Balanced Player Fit";
-    shaft = "Regular Flex";
-    clubs = "Distance irons + balanced driver setup";
+  if (answers.includes("Fast")) {
+    title = "Performance Player Fit";
+    desc = "Lower spin, more control, and equipment built for higher swing speeds.";
   }
 
-  else {
-    profile = "Performance Player Fit";
-    shaft = "Stiff / X-Stiff";
-    clubs = "Low spin driver + control-focused irons";
+  if (answers.includes("Accuracy")) {
+    title = "Control-Focused Fit";
+    desc = "Clubs designed to tighten your shot pattern and improve accuracy.";
   }
 
-  document.getElementById("profile").innerText = profile;
-  document.getElementById("distance").innerText = distance + " yards";
-  document.getElementById("shaft").innerText = shaft;
-  document.getElementById("clubs").innerText = clubs;
+  document.getElementById("title").innerText = title;
+  document.getElementById("desc").innerText = desc;
 }
 
-function restart() {
-  document.getElementById("result").classList.add("hidden");
-  document.getElementById("input").classList.remove("hidden");
-}
+loadQuestion();
 
 </script>
 
 </body>
-</html>
+</html>  
