@@ -85,21 +85,23 @@
     }
 
     .title {
-      font-size: 18px;
+      font-size: 16px;
       margin-bottom: 6px;
+      font-weight: bold;
     }
 
     .desc {
       font-size: 13px;
       color: #aaa;
-      line-height: 1.5;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      line-height: 1.4;
     }
 
     .bundleTitle {
       font-size: 16px;
       margin-top: 10px;
       color: #fff;
+      font-weight: bold;
     }
 
     .hidden { display: none; }
@@ -112,7 +114,7 @@
 <div class="container">
 
   <h1>RIGHT STIXS FIT</h1>
-  <div class="sub">Build your perfect golf setup</div>
+  <div class="sub">Your personal golf club fitting engine</div>
 
   <!-- QUIZ -->
   <div id="quiz" class="card">
@@ -124,34 +126,43 @@
   <!-- RESULT -->
   <div id="result" class="card hidden">
 
-    <div class="tag">YOUR RECOMMENDED SETUP</div>
+    <div class="tag">YOUR FIT REPORT</div>
 
     <div class="bundleTitle" id="bundleType"></div>
 
-    <!-- FULL SET OPTIONS -->
+    <!-- FULL SETS -->
     <div class="section">
       <div class="title">Full Set Options</div>
-
-      <div class="desc">Choose a complete setup based on your level:</div>
 
       <a id="starterKit" class="buy" target="_blank">Beginner Starter Kit</a>
       <a id="valueSet" class="buy" target="_blank">Best Value Full Set</a>
       <a id="premiumSet" class="buy" target="_blank">Premium Full Set</a>
     </div>
 
-    <!-- INDIVIDUAL CLUBS -->
+    <!-- DRIVER -->
     <div class="section">
-      <div class="title">Individual Clubs</div>
-
+      <div class="title">Driver</div>
       <div class="desc" id="driverText"></div>
       <a id="driverLink" class="buy" target="_blank">Shop Driver</a>
+    </div>
 
+    <!-- IRONS -->
+    <div class="section">
+      <div class="title">Irons</div>
       <div class="desc" id="ironText"></div>
       <a id="ironLink" class="buy" target="_blank">Shop Irons</a>
+    </div>
 
+    <!-- WEDGES -->
+    <div class="section">
+      <div class="title">Wedges</div>
       <div class="desc" id="wedgeText"></div>
       <a id="wedgeLink" class="buy" target="_blank">Shop Wedges</a>
+    </div>
 
+    <!-- PUTTER -->
+    <div class="section">
+      <div class="title">Putter</div>
       <div class="desc" id="putterText"></div>
       <a id="putterLink" class="buy" target="_blank">Shop Putter</a>
     </div>
@@ -165,18 +176,9 @@
 <script>
 
 const questions = [
-  {
-    q: "What is your experience level?",
-    a: ["Beginner", "Casual", "Advanced"]
-  },
-  {
-    q: "What matters most?",
-    a: ["Distance", "Accuracy", "Consistency"]
-  },
-  {
-    q: "How fast is your swing?",
-    a: ["Slow", "Average", "Fast"]
-  }
+  { q: "What is your experience level?", a: ["Beginner", "Casual", "Advanced"] },
+  { q: "What matters most?", a: ["Distance", "Accuracy", "Consistency"] },
+  { q: "How fast is your swing?", a: ["Slow", "Average", "Fast"] }
 ];
 
 let step = 0;
@@ -213,65 +215,61 @@ function showResult() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
-  let driver = "";
-  let irons = "";
-  let wedges = "";
-  let putter = "";
   let bundle = "";
-
   let starter = "";
   let value = "";
   let premium = "";
 
-  let driverLink = "";
-  let ironLink = "";
-  let wedgeLink = "";
-  let putterLink = "";
+  let driver = "";
+  let irons = "";
+  let wedges = "";
+  let putter = "";
 
-  // LEVEL LOGIC
+  // BEGINNER
   if (answers.includes("Beginner")) {
 
-    bundle = "Beginner Starter Kit (Easy & Forgiving)";
+    bundle = "Beginner Starter Kit";
 
-    driver = "High-loft driver for easy launch";
-    irons = "Super forgiving irons for straighter shots";
-    wedges = "Easy bounce wedges for contact";
-    putter = "Mallet putter for stability";
+    driver = "Callaway Big Bertha Driver";
+    irons = "TaylorMade SIM Max Irons";
+    wedges = "Cleveland CBX Wedges";
+    putter = "Odyssey White Hot Mallet Putter";
 
-    starter = "https://www.amazon.com/s?k=beginner+golf+set&tag=YOURID";
-    value = "https://www.amazon.com/s?k=callaway+complete+golf+set&tag=YOURID";
-    premium = "https://www.amazon.com/s?k=premium+golf+clubs+set&tag=YOURID";
+    starter = "https://www.amazon.com/s?k=beginner+golf+set";
+    value = "https://www.amazon.com/s?k=callaway+complete+golf+set";
+    premium = "https://www.amazon.com/s?k=premium+golf+set";
   }
 
+  // FAST / ADVANCED
   else if (answers.includes("Fast")) {
 
-    bundle = "Premium Performance Setup (Control & Speed)";
+    bundle = "Premium Performance Setup";
 
-    driver = "Low-spin driver for control";
-    irons = "Players irons for precision";
-    wedges = "Tour wedges for shot shaping";
-    putter = "Blade putter for feel";
+    driver = "TaylorMade Stealth 2 Driver";
+    irons = "Titleist T100 Iron Set";
+    wedges = "Titleist Vokey SM9 Wedges";
+    putter = "Scotty Cameron Blade Putter";
 
-    starter = "https://www.amazon.com/s?k=beginner+golf+set&tag=YOURID";
-    value = "https://www.amazon.com/s?k=titleist+golf+set&tag=YOURID";
-    premium = "https://www.amazon.com/s?k=taylormade+premium+golf+set&tag=YOURID";
+    starter = "https://www.amazon.com/s?k=beginner+golf+set";
+    value = "https://www.amazon.com/s?k=titleist+golf+set";
+    premium = "https://www.amazon.com/s?k=taylormade+premium+set";
   }
 
+  // BALANCED
   else {
 
-    bundle = "Balanced Full Set (Best Value Choice)";
+    bundle = "Best Value Full Set";
 
-    driver = "Balanced driver for distance + control";
-    irons = "Forgiving but powerful irons";
-    wedges = "Standard wedges for all conditions";
-    putter = "Stable putter for consistency";
+    driver = "Callaway Rogue Driver";
+    irons = "TaylorMade SIM2 Irons";
+    wedges = "Cleveland RTX Wedges";
+    putter = "Odyssey Stroke Lab Putter";
 
-    starter = "https://www.amazon.com/s?k=beginner+golf+set&tag=YOURID";
-    value = "https://www.amazon.com/s?k=best+value+golf+set&tag=YOURID";
-    premium = "https://www.amazon.com/s?k=titleist+complete+set&tag=YOURID";
+    starter = "https://www.amazon.com/s?k=beginner+golf+set";
+    value = "https://www.amazon.com/s?k=best+value+golf+set";
+    premium = "https://www.amazon.com/s?k=titleist+complete+set";
   }
 
-  // TEXT
   document.getElementById("bundleType").innerText = bundle;
 
   document.getElementById("driverText").innerText = driver;
@@ -279,15 +277,9 @@ function showResult() {
   document.getElementById("wedgeText").innerText = wedges;
   document.getElementById("putterText").innerText = putter;
 
-  // LINKS
   document.getElementById("starterKit").href = starter;
   document.getElementById("valueSet").href = value;
   document.getElementById("premiumSet").href = premium;
-
-  document.getElementById("driverLink").href = "https://www.amazon.com/s?k=driver+golf&tag=YOURID";
-  document.getElementById("ironLink").href = "https://www.amazon.com/s?k=iron+golf+set&tag=YOURID";
-  document.getElementById("wedgeLink").href = "https://www.amazon.com/s?k=golf+wedges&tag=YOURID";
-  document.getElementById("putterLink").href = "https://www.amazon.com/s?k=golf+putter&tag=YOURID";
 }
 
 function restart() {
