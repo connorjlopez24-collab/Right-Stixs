@@ -1,0 +1,24 @@
+{
+  "name": "right-stixs",
+  "version": "1.0.0",
+  "description": "Golf equipment recommendation quiz with Vercel Web Analytics",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 3000 || python -m http.server 3000",
+    "test": "echo \"No tests specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connorjlopez24-collab/Right-Stixs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/connorjlopez24-collab/Right-Stixs/issues"
+  },
+  "homepage": "https://github.com/connorjlopez24-collab/Right-Stixs#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
