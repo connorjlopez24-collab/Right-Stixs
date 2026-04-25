@@ -97,6 +97,13 @@
       text-decoration: none;
     }
 
+    .why {
+      font-size: 13px;
+      color: #bbb;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
   </style>
 </head>
 
@@ -118,6 +125,8 @@
   <div id="result" class="card hidden">
 
     <div class="tag">YOUR FULL GOLF BAG</div>
+
+    <div id="why" class="why"></div>
 
     <!-- DRIVER -->
     <div class="section">
@@ -174,7 +183,6 @@ let step = 0;
 let answers = [];
 
 function loadQuestion() {
-
   let q = questions[step];
   document.getElementById("question").innerText = q.q;
 
@@ -190,7 +198,6 @@ function loadQuestion() {
 }
 
 function select(answer) {
-
   answers.push(answer);
   step++;
 
@@ -210,6 +217,7 @@ function showResult() {
   let irons = "";
   let wedges = "";
   let putter = "";
+  let why = "";
 
   let driverLink = "";
   let ironLink = "";
@@ -223,6 +231,8 @@ function showResult() {
     irons = "TaylorMade Stealth Irons (forgiveness)";
     wedges = "Cleveland CBX Wedges (easy control)";
     putter = "Odyssey Mallet Putter (very forgiving)";
+
+    why = "Best for you because you're still building consistency. These clubs are easier to hit, help get the ball in the air, and reduce bad misses.";
 
     driverLink = "https://www.amazon.com/s?k=callaway+driver&tag=YOURID";
     ironLink = "https://www.amazon.com/s?k=taylormade+irons&tag=YOURID";
@@ -238,6 +248,8 @@ function showResult() {
     wedges = "Titleist Vokey Wedges (tour control)";
     putter = "Scotty Cameron Blade (feel + control)";
 
+    why = "Best for you because you generate higher speed. These clubs help control spin, tighten dispersion, and give you more precision.";
+
     driverLink = "https://www.amazon.com/s?k=taylormade+driver&tag=YOURID";
     ironLink = "https://www.amazon.com/s?k=titleist+irons&tag=YOURID";
     wedgeLink = "https://www.amazon.com/s?k=vokey+wedges&tag=YOURID";
@@ -252,6 +264,8 @@ function showResult() {
     wedges = "Cleveland RTX Wedges";
     putter = "Odyssey Stroke Lab Putter";
 
+    why = "Best for you because you need a mix of distance and control. These clubs give forgiveness while still performing well.";
+
     driverLink = "https://www.amazon.com/s?k=callaway+rogue+driver&tag=YOURID";
     ironLink = "https://www.amazon.com/s?k=taylormade+sim+irons&tag=YOURID";
     wedgeLink = "https://www.amazon.com/s?k=cleveland+rtx+wedges&tag=YOURID";
@@ -262,6 +276,8 @@ function showResult() {
   document.getElementById("ironText").innerText = irons;
   document.getElementById("wedgeText").innerText = wedges;
   document.getElementById("putterText").innerText = putter;
+
+  document.getElementById("why").innerText = why;
 
   document.getElementById("driverLink").href = driverLink;
   document.getElementById("ironLink").href = ironLink;
