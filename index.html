@@ -68,7 +68,7 @@
 
     .section {
       margin-top: 10px;
-      padding: 10px;
+      padding: 12px;
       background: #0f0f0f;
       border: 1px solid #1f1f1f;
       border-radius: 10px;
@@ -76,25 +76,25 @@
 
     .title {
       font-size: 18px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .desc {
       font-size: 13px;
       color: #aaa;
       line-height: 1.5;
+      margin-bottom: 10px;
     }
 
     .buy {
-      margin-top: 8px;
-      background: #fff;
-      color: #000;
-      border-radius: 8px;
-      padding: 10px;
-      font-weight: bold;
-      text-decoration: none;
       display: block;
       text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff;
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
     }
 
   </style>
@@ -105,49 +105,49 @@
 <div class="container">
 
   <h1>RIGHT STIXS FIT</h1>
-  <div class="sub">Full bag fitting in under 30 seconds</div>
+  <div class="sub">Find your perfect golf clubs in under 30 seconds</div>
 
   <!-- QUIZ -->
   <div id="quiz" class="card">
-
     <div class="tag">QUESTION</div>
     <div class="question" id="question"></div>
     <div id="options"></div>
-
   </div>
 
   <!-- RESULT -->
   <div id="result" class="card hidden">
 
-    <div class="tag">YOUR CUSTOM GOLF BAG</div>
+    <div class="tag">YOUR FULL GOLF BAG</div>
 
     <!-- DRIVER -->
     <div class="section">
       <div class="title">Driver</div>
       <div class="desc" id="driverText"></div>
-      <a href="#" class="buy">View Recommended Drivers</a>
+      <a id="driverLink" class="buy" target="_blank">Shop Driver</a>
     </div>
 
     <!-- IRONS -->
     <div class="section">
       <div class="title">Irons</div>
       <div class="desc" id="ironText"></div>
-      <a href="#" class="buy">View Recommended Irons</a>
+      <a id="ironLink" class="buy" target="_blank">Shop Irons</a>
     </div>
 
     <!-- WEDGES -->
     <div class="section">
       <div class="title">Wedges</div>
       <div class="desc" id="wedgeText"></div>
-      <a href="#" class="buy">View Recommended Wedges</a>
+      <a id="wedgeLink" class="buy" target="_blank">Shop Wedges</a>
     </div>
 
     <!-- PUTTER -->
     <div class="section">
       <div class="title">Putter</div>
       <div class="desc" id="putterText"></div>
-      <a href="#" class="buy">View Recommended Putters</a>
+      <a id="putterLink" class="buy" target="_blank">Shop Putter</a>
     </div>
+
+    <button onclick="restart()">Start Over</button>
 
   </div>
 
@@ -176,7 +176,6 @@ let answers = [];
 function loadQuestion() {
 
   let q = questions[step];
-
   document.getElementById("question").innerText = q.q;
 
   let box = document.getElementById("options");
@@ -207,35 +206,75 @@ function showResult() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
 
-  // DRIVER
-  let driver = "Balanced 10.5° driver for easy launch";
-  let irons = "Forgiving irons for consistency";
-  let wedges = "Standard wedges for control around greens";
-  let putter = "Standard mallet putter for stability";
+  let driver = "";
+  let irons = "";
+  let wedges = "";
+  let putter = "";
 
+  let driverLink = "";
+  let ironLink = "";
+  let wedgeLink = "";
+  let putterLink = "";
+
+  // BEGINNER
   if (answers.includes("Beginner")) {
-    driver = "High-loft driver (11°–12°) for easier launch";
-    irons = "Super forgiving irons for straighter shots";
-    wedges = "Easy bounce wedges for better contact";
-    putter = "High-MOI mallet putter for stability and forgiveness";
+
+    driver = "Callaway Big Bertha Driver (easy launch)";
+    irons = "TaylorMade Stealth Irons (forgiveness)";
+    wedges = "Cleveland CBX Wedges (easy control)";
+    putter = "Odyssey Mallet Putter (very forgiving)";
+
+    driverLink = "https://www.amazon.com/s?k=callaway+driver&tag=YOURID";
+    ironLink = "https://www.amazon.com/s?k=taylormade+irons&tag=YOURID";
+    wedgeLink = "https://www.amazon.com/s?k=cleveland+wedges&tag=YOURID";
+    putterLink = "https://www.amazon.com/s?k=odyssey+putter&tag=YOURID";
   }
 
-  if (answers.includes("Fast")) {
-    driver = "Low-spin driver (9°) for control and distance";
-    irons = "Players irons for precision";
-    wedges = "Tour wedges for shot shaping";
-    putter = "Blade putter for better feel and control";
+  // FAST / ADVANCED
+  else if (answers.includes("Fast")) {
+
+    driver = "TaylorMade Stealth 2 Driver (low spin)";
+    irons = "Titleist T100 Irons (precision)";
+    wedges = "Titleist Vokey Wedges (tour control)";
+    putter = "Scotty Cameron Blade (feel + control)";
+
+    driverLink = "https://www.amazon.com/s?k=taylormade+driver&tag=YOURID";
+    ironLink = "https://www.amazon.com/s?k=titleist+irons&tag=YOURID";
+    wedgeLink = "https://www.amazon.com/s?k=vokey+wedges&tag=YOURID";
+    putterLink = "https://www.amazon.com/s?k=scotty+cameron+putter&tag=YOURID";
   }
 
-  if (answers.includes("Accuracy")) {
-    irons = "Accuracy-focused irons for tighter shot dispersion";
-    putter = "Face-balanced mallet putter for straight strokes";
+  // BALANCED
+  else {
+
+    driver = "Callaway Rogue Driver (balanced distance)";
+    irons = "TaylorMade SIM Irons (distance + control)";
+    wedges = "Cleveland RTX Wedges";
+    putter = "Odyssey Stroke Lab Putter";
+
+    driverLink = "https://www.amazon.com/s?k=callaway+rogue+driver&tag=YOURID";
+    ironLink = "https://www.amazon.com/s?k=taylormade+sim+irons&tag=YOURID";
+    wedgeLink = "https://www.amazon.com/s?k=cleveland+rtx+wedges&tag=YOURID";
+    putterLink = "https://www.amazon.com/s?k=odyssey+stroke+lab+putter&tag=YOURID";
   }
 
   document.getElementById("driverText").innerText = driver;
   document.getElementById("ironText").innerText = irons;
   document.getElementById("wedgeText").innerText = wedges;
   document.getElementById("putterText").innerText = putter;
+
+  document.getElementById("driverLink").href = driverLink;
+  document.getElementById("ironLink").href = ironLink;
+  document.getElementById("wedgeLink").href = wedgeLink;
+  document.getElementById("putterLink").href = putterLink;
+}
+
+function restart() {
+  step = 0;
+  answers = [];
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  loadQuestion();
 }
 
 loadQuestion();
